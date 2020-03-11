@@ -33,6 +33,7 @@ final class API42Manager {
     let clientSecret = "90c7a9cf0615f6427acc56735ca1c866e5deadbd5426262401600af0b04286cc"
     /// Перенаправляемый адресс, вызываемый API после авторизациии (OAuth 2.0)
     let redirectURI = "com.vmormont.swifty://oauth2callback"
+    var state = ""
     
     
     // MARK: - API Paths for requests
@@ -119,6 +120,39 @@ final class API42Manager {
 extension API42Manager {
     
     func startOAuthLogin() {
+        if hasOAuthToken() {
+            if let completionHandler = oAuthTokenCompletionHandler {
+                completionHandler(.success(()))
+            }
+            return
+        }
         
+        state = generateRandomString()
+        let authPath = "https://api.intra.42.fr/oauth/authorize?"
+        + "client_id=\(clientUID)&redirect_uri=\(redirectURI)"
+        + "&state=\(state)&response_type=code&scope=public+profile+projects"
+        
+        let webViewController = WebWireframe.makeViewController(delegate: nil)
+        webViewController.load(authPath)
+        let navigationController = UINavigationController(rootViewController: webViewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        DispatchQueue.main.async {
+            UIApplication.getTopMostViewController()?.present(navigationController, animated: true, completion: nil)
+        }
+        
+    }
+    
+    private func generateRandomString() -> String {
+        let length = Int.random(in: 43...128)
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        return String((0..<length).map { _ in letters.randomElement()! })
+    }
+}
+
+extension API42Manager {
+    
+    
+    func processOAuthResponse(_ url: URL) {
+        // ???
     }
 }
