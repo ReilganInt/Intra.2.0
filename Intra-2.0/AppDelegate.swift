@@ -18,6 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
+    
+    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+        API42Manager.shared.processOAuthResponse(url)
+        return true
+    }
 
     // MARK: UISceneSession Lifecycle
 
