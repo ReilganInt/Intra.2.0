@@ -58,6 +58,7 @@
 		84EE39E62419375D00A9D0B0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE39D72419375D00A9D0B0 /* MainView.swift */; };
 		84EE39E72419375D00A9D0B0 /* MainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE39D82419375D00A9D0B0 /* MainProtocol.swift */; };
 		84EE39E82419375D00A9D0B0 /* MainWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE39D92419375D00A9D0B0 /* MainWireframe.swift */; };
+		84EE39EB2419437400A9D0B0 /* DataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EE39EA2419437400A9D0B0 /* DataCoordinator.swift */; };
 		F03D510D0B909790247A2654 /* Pods_Intra_2_0.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D744F9E4F90F91189C67456B /* Pods_Intra_2_0.framework */; };
 /* End PBXBuildFile section */
 
@@ -117,6 +118,7 @@
 		84EE39D72419375D00A9D0B0 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		84EE39D82419375D00A9D0B0 /* MainProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainProtocol.swift; sourceTree = "<group>"; };
 		84EE39D92419375D00A9D0B0 /* MainWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWireframe.swift; sourceTree = "<group>"; };
+		84EE39EA2419437400A9D0B0 /* DataCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCoordinator.swift; sourceTree = "<group>"; };
 		D744F9E4F90F91189C67456B /* Pods_Intra_2_0.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intra_2_0.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -174,6 +176,7 @@
 		8493EEBD2418FF6C00818EC5 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				84EE39E92419435400A9D0B0 /* CoreData */,
 				8493EEBE2418FF7800818EC5 /* API42 */,
 			);
 			path = Managers;
@@ -386,6 +389,14 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		84EE39E92419435400A9D0B0 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39EA2419437400A9D0B0 /* DataCoordinator.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		E5394FF0F32C1AF45F907F0F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -528,6 +539,7 @@
 				8493EF012419159400818EC5 /* WebDelegateProtocol.swift in Sources */,
 				8493EED224190F8C00818EC5 /* LoginInteractorDependencies.swift in Sources */,
 				847021FA2417F3B60093D43C /* AppDelegate.swift in Sources */,
+				84EE39EB2419437400A9D0B0 /* DataCoordinator.swift in Sources */,
 				84EE39E72419375D00A9D0B0 /* MainProtocol.swift in Sources */,
 				8493EF042419159400818EC5 /* WebWireframe.swift in Sources */,
 				8493EEFA2419159400818EC5 /* WebRouter.swift in Sources */,
