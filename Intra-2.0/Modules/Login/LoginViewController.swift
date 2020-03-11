@@ -26,6 +26,7 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         presenter?.didReceiveEvent(.viewDidLoad)
+        
     }
 }
 

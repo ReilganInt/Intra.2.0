@@ -37,14 +37,21 @@ extension LoginPresenter: LoginPresenterProtocol {
     func didReceiveEvent(_ event: LoginEvent) {
         switch event {
             case .viewDidLoad:
-                debugPrint("viewDidLoad")
+                API42Manager.shared.oAuthTokenCompletionHandler = { result in
+                    switch result {
+                    case .failure(let err):
+                        AlertHelper.showAlert(style: .alert, title: "Token Error", message: err.localizedDescription)
+                    case .success(_):
+                        break
+                    }
+                }
         }
     }
 
     func didTriggerAction(_ action: LoginAction) {
         switch action {
         case .didLogin:
-            interactor
+            interactor.startOAuthLogin()
         }
     }
 }
