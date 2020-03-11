@@ -44,7 +44,8 @@ extension WebPresenter: WebPresenterProtocol {
 
     func didTriggerAction(_ action: WebAction) {
         switch action {
-            default: ()
+        case .didCancelButtonTapped:
+            router.dismiss(animated: true)
         }
     }
 }

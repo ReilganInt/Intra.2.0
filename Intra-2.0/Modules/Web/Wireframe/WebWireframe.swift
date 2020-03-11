@@ -10,12 +10,12 @@
 import UIKit
 
 protocol WebWireframeProtocol {
-    static func makeViewController(delegate: WebDelegateProtocol?) -> (UIViewController & WebProtocol)
+    static func makeViewController(delegate: WebDelegateProtocol?) -> (WebViewController)
 }
 
 struct WebWireframe: WebWireframeProtocol {
-    static func makeViewController(delegate: WebDelegateProtocol?) -> (UIViewController & WebProtocol) {
-        let viewController = WebViewController()
+    static func makeViewController(delegate: WebDelegateProtocol?) -> (WebViewController) {
+        let viewController = WebViewController(nibName: nil, bundle: nil)
 
         let routerDependencies = WebRouterDependencies()
         let router = WebRouter(dependencies: routerDependencies, viewController: viewController)
