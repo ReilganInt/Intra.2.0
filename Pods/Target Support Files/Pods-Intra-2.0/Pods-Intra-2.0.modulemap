@@ -1,0 +1,6 @@
+framework module Pods_Intra_2_0 {
+  umbrella header "Pods-Intra-2.0-umbrella.h"
+
+  export *
+  module * { export * }
+}
