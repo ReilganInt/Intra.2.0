@@ -114,8 +114,8 @@ final class API42Manager {
     /// ...
     private func setupAPIData() {
         /// Cкачать какие-то важные данные для стартовой страницы приложения
-        /// ВАЖНО: нужно отловить ошибки от API, вдруг ключ уже устарел и нужно тогда вызывать
-        /// startОAuthLogin()
+        /// Нужно написать функцию refreshTokens и обвноить access tokenна основе
+        /// refresh token
     }
     
     /// Очистка токенов
@@ -131,8 +131,9 @@ extension API42Manager {
     
     func startOAuthLogin() {
         if hasOAuthToken() {
-            /// ВАЖНО: нужно отловить ошибки от API, вдруг ключ уже устарел и нужно тогда вызывать
-            /// startОAuthLogin()
+            /// ВАЖНО: нужно отловить ошибки от API, вдруг ключ уже устарел
+            /// Нужно написать функцию refreshTokens и обвноить access tokenна основе
+            /// refresh token
             if let completionHandler = oAuthTokenCompletionHandler {
                 completionHandler(.success(()))
             }
