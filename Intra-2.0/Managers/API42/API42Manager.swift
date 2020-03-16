@@ -11,6 +11,12 @@ import UIKit
 import KeychainSwift
 import SwiftyJSON
 
+/**
+            Убедительная просьба добавлять функционал в extension
+            либо если исправляете текущий функционал, то делать это на своей ветке и кидать
+            Pull Request
+ */
+
 
 // Написал на будущее
 public enum HTTPMethod: String {
@@ -38,7 +44,6 @@ final class API42Manager {
     /// Перенаправляемый адресс, вызываемый API после авторизациии (OAuth 2.0)
     let redirectURI = "com.vmormont.swifty://oauth2callback"
     var state = ""
-    
     
     // MARK: - API Paths for requests
     /// URL для потока учетных данных клиента (OAuth 2.0 Flow)
@@ -222,7 +227,6 @@ extension API42Manager {
                         self.webViewController?.dismiss(animated: true, completion: nil)
                         return
                     }
-                    
                     guard valueJSON["token_type"].string == "bearer",
                         let accessToken = valueJSON["access_token"].string,
                         let refreshToken = valueJSON["refresh_token"].string
@@ -230,12 +234,9 @@ extension API42Manager {
                             self.webViewController?.dismiss(animated: true, completion: nil)
                             return
                     }
-                    
                     self.oAuthAccessToken = accessToken
                     self.oAuthRefreshToken = refreshToken
-                    
                     self.setupAPIData()
-                    // Редирект на логин контроллер
                     self.webViewController?.dismiss(animated: true, completion: nil)
                 }
             }.resume()
