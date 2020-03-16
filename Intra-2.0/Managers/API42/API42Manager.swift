@@ -29,7 +29,8 @@ final class API42Manager {
     /// Общий экземпляр менеджера для доступа к  42 API Менеджеру
     static let shared = API42Manager()
     
-    // MARK: - API Credentials (Временно)
+    // MARK: - API Credentials (Временные clientUID, clientSecret, redirectURI)
+    /// после изменения этих данных не забыть изменить URL Scheme!
     /// API Уникальный идентификатор приложения (UID)
     let clientUID = "de1fa280fe72d947587a287623172724172ce26c678f9d25bdb94029107d49df"
     /// API Уникальный секретный ключ (Secret)
@@ -45,7 +46,6 @@ final class API42Manager {
     /// Базовый URL для доступа к API
     let baseURLPath = "https://api.intra.42.fr/v2/"
     
-    
     // MARK: - Keychain
     /// Keychain хранилище
     let keychain = KeychainSwift()
@@ -58,7 +58,9 @@ final class API42Manager {
     // MARK: - Request controller
     /// Контроллер обработки OAuth запроса
     var webViewController: WebViewController?
-    /// Таймер для запросов
+    /// Таймер для запросов, нужно будет ставить ограничене по секундам на авторизациюю
+    /// time out, не знаю пока на сколько стаивть, поэтому пока просто лежит здесь и ждет
+    /// своего часа
     var requestTimer: Timer?
     /// Access Token от API после авторизациии (OAuth 2.0)
     var oAuthAccessToken: String? {
@@ -86,13 +88,11 @@ final class API42Manager {
     /// данных клиента (OAuth 2.0 Flow)
     var oAuthTokenCompletionHandler: ((Result<Void, Error>) -> Void)?
     
-    
     /// Выход пользователя из приложения
     func logoutUser() {
         clearTokenKeys()
         // Первесети на страничку входа, но не здесь а там где происходит logout
     }
-    
     
     private init() {
         if hasOAuthToken() {
@@ -109,6 +109,8 @@ final class API42Manager {
     /// ...
     private func setupAPIData() {
         /// Cкачать какие-то важные данные для стартовой страницы приложения
+        /// ВАЖНО: нужно отловить ошибки от API, вдруг ключ уже устарел и нужно тогда вызывать
+        /// startОAuthLogin()
     }
     
     /// Очистка токенов
@@ -124,6 +126,8 @@ extension API42Manager {
     
     func startOAuthLogin() {
         if hasOAuthToken() {
+            /// ВАЖНО: нужно отловить ошибки от API, вдруг ключ уже устарел и нужно тогда вызывать
+            /// startОAuthLogin()
             if let completionHandler = oAuthTokenCompletionHandler {
                 completionHandler(.success(()))
             }
@@ -190,6 +194,18 @@ extension API42Manager {
             ]
             
             var request = URLRequest(url: url)
+            /**
+                Значения кодируются в кортежах с ключом, разделенных
+                символом '&', с '=' между ключом и значением:
+ 
+                    application/x-www-form-urlencoded
+             
+                Не буквенно-цифровые символы - percent encoded: '%' это причина, по которой этот тип не подходит для использования с двоичными данными (вместо этого используется multipart/form-data).
+                Но в данном случае у меня не получилось с ним поработать, поэтому я просто исключил процент
+                функцией:
+                    
+                    percentEscaped()
+            */
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "POST"
             request.httpBody = tokenParams.percentEscaped().data(using: .utf8)
