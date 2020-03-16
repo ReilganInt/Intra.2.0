@@ -370,21 +370,13 @@
 		84EE39CA2419374A00A9D0B0 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				84EE39CB2419375D00A9D0B0 /* MainInteractorDependencies.swift */,
-				84EE39CC2419375D00A9D0B0 /* MainAction.swift */,
-				84EE39CD2419375D00A9D0B0 /* MainPresenter.swift */,
-				84EE39CE2419375D00A9D0B0 /* MainRouter.swift */,
-				84EE39CF2419375D00A9D0B0 /* MainRouterDependencies.swift */,
-				84EE39D02419375D00A9D0B0 /* MainRoute.swift */,
-				84EE39D12419375D00A9D0B0 /* MainViewController.swift */,
-				84EE39D22419375D00A9D0B0 /* MainWireframeError.swift */,
-				84EE39D32419375D00A9D0B0 /* MainPresenterDependencies.swift */,
-				84EE39D42419375D00A9D0B0 /* MainInteractor.swift */,
-				84EE39D52419375D00A9D0B0 /* MainDelegateProtocol.swift */,
-				84EE39D62419375D00A9D0B0 /* MainEvent.swift */,
-				84EE39D72419375D00A9D0B0 /* MainView.swift */,
-				84EE39D82419375D00A9D0B0 /* MainProtocol.swift */,
-				84EE39D92419375D00A9D0B0 /* MainWireframe.swift */,
+				84F496FC241FA25600B0FDF8 /* Protocols */,
+				84F496FB241FA23B00B0FDF8 /* Wireframe */,
+				84F496FA241FA23600B0FDF8 /* Router */,
+				84F496F9241FA23000B0FDF8 /* Interactor */,
+				84F496F8241FA22900B0FDF8 /* ViewController */,
+				84F496F7241FA22200B0FDF8 /* View */,
+				84F496F6241FA21400B0FDF8 /* Presenter */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -395,6 +387,70 @@
 				84EE39EA2419437400A9D0B0 /* DataCoordinator.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		84F496F6241FA21400B0FDF8 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39CC2419375D00A9D0B0 /* MainAction.swift */,
+				84EE39CD2419375D00A9D0B0 /* MainPresenter.swift */,
+				84EE39D32419375D00A9D0B0 /* MainPresenterDependencies.swift */,
+				84EE39D62419375D00A9D0B0 /* MainEvent.swift */,
+			);
+			name = Presenter;
+			sourceTree = "<group>";
+		};
+		84F496F7241FA22200B0FDF8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39D72419375D00A9D0B0 /* MainView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		84F496F8241FA22900B0FDF8 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39D12419375D00A9D0B0 /* MainViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		84F496F9241FA23000B0FDF8 /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39CB2419375D00A9D0B0 /* MainInteractorDependencies.swift */,
+				84EE39D42419375D00A9D0B0 /* MainInteractor.swift */,
+			);
+			name = Interactor;
+			sourceTree = "<group>";
+		};
+		84F496FA241FA23600B0FDF8 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39CE2419375D00A9D0B0 /* MainRouter.swift */,
+				84EE39CF2419375D00A9D0B0 /* MainRouterDependencies.swift */,
+				84EE39D02419375D00A9D0B0 /* MainRoute.swift */,
+			);
+			name = Router;
+			sourceTree = "<group>";
+		};
+		84F496FB241FA23B00B0FDF8 /* Wireframe */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39D22419375D00A9D0B0 /* MainWireframeError.swift */,
+				84EE39D92419375D00A9D0B0 /* MainWireframe.swift */,
+			);
+			name = Wireframe;
+			sourceTree = "<group>";
+		};
+		84F496FC241FA25600B0FDF8 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				84EE39D52419375D00A9D0B0 /* MainDelegateProtocol.swift */,
+				84EE39D82419375D00A9D0B0 /* MainProtocol.swift */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 		E5394FF0F32C1AF45F907F0F /* Frameworks */ = {

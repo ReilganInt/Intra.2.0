@@ -12,13 +12,15 @@ import OAuthSwift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-
+    
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        // Вызывается когда intra.42.fr перенаправляет после удачной авторизации
+        // на `com.vmormont.swifty://oauth2callback`
             guard let url = URLContexts.first?.url else {
                 return
             }
-            if (url.host == "oauth-callback") {
-                OAuthSwift.handle(url: url)
+            if (url.host == "oauth2callback") {
+                API42Manager.shared.processOAuthResponse(url)
             }
     }
     

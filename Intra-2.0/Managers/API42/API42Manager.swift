@@ -9,7 +9,10 @@
 import Foundation
 import UIKit
 import KeychainSwift
+import SwiftyJSON
 
+
+// Написал на будущее
 public enum HTTPMethod: String {
     case get = "GET"
     case put = "PUT"
@@ -57,7 +60,7 @@ final class API42Manager {
     var webViewController: WebViewController?
     /// Таймер для запросов
     var requestTimer: Timer?
-    /// Токен получаемый от API после авторизациии (OAuth 2.0)
+    /// Access Token от API после авторизациии (OAuth 2.0)
     var oAuthAccessToken: String? {
         get { keychain.get(keychainAccessToken) }
         set {
@@ -68,7 +71,7 @@ final class API42Manager {
             }
         }
     }
-    /// Обновленный токен получаемый от API после авторизациии (OAuth 2.0)
+    /// Refresh Token получаемый от API после авторизациии (OAuth 2.0)
     var oAuthRefreshToken: String? {
         get { keychain.get(keychainRefreshToken) }
         set {
@@ -87,7 +90,7 @@ final class API42Manager {
     /// Выход пользователя из приложения
     func logoutUser() {
         clearTokenKeys()
-        // Первесети на страничку входа
+        // Первесети на страничку входа, но не здесь а там где происходит logout
     }
     
     
@@ -105,10 +108,10 @@ final class API42Manager {
     
     /// ...
     private func setupAPIData() {
-        /// ???
+        /// Cкачать какие-то важные данные для стартовой страницы приложения
     }
     
-    /// Очистка токенов после входа из приложения
+    /// Очистка токенов
     private func clearTokenKeys() {
         oAuthAccessToken = nil
         oAuthRefreshToken = nil
@@ -151,8 +154,125 @@ extension API42Manager {
 
 extension API42Manager {
     
-    
     func processOAuthResponse(_ url: URL) {
-        // ???
+        guard
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            let queryItems = components.queryItems
+            else { return }
+        
+        var codeValue: String?
+        
+        for item in queryItems {
+            if item.name.lowercased() == "code" {
+                codeValue = item.value
+            } else if item.name.lowercased() == "state" {
+                if item.value != state { return }
+            } else if item.name.lowercased() == "error" {
+                if let completionHandler = self.oAuthTokenCompletionHandler {
+                    completionHandler(.failure(NSError(domain: "err", code: 0, userInfo: nil)))
+                    self.webViewController?.dismiss(animated: true, completion: nil)
+                    return
+                }
+            }
+            guard let code = codeValue else {
+                self.webViewController?.dismiss(animated: true, completion: nil)
+                return
+            }
+            
+            let url = URL(string: oAuthURLPath)!
+            let tokenParams = [
+                "grant_type": "authorization_code",
+                "client_id": clientUID,
+                "client_secret": clientSecret,
+                "code": code,
+                "redirect_uri": redirectURI,
+                "state": state
+            ]
+            
+            var request = URLRequest(url: url)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            request.httpBody = tokenParams.percentEscaped().data(using: .utf8)
+            
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                DispatchQueue.main.async {
+                    guard error == nil, let data = data, let valueJSON = try? JSON(data: data) else {
+                        if let error = error {
+                            print("OAuth Response Error: \(error)")
+                        }
+                        if let completionHandler = self.oAuthTokenCompletionHandler {
+                            completionHandler(.failure(error!))
+                        }
+                        self.webViewController?.dismiss(animated: true, completion: nil)
+                        return
+                    }
+                    
+                    guard valueJSON["token_type"].string == "bearer",
+                        let accessToken = valueJSON["access_token"].string,
+                        let refreshToken = valueJSON["refresh_token"].string
+                        else {
+                            self.webViewController?.dismiss(animated: true, completion: nil)
+                            return
+                    }
+                    
+                    self.oAuthAccessToken = accessToken
+                    self.oAuthRefreshToken = refreshToken
+                    
+                    self.setupAPIData()
+                    // Редирект на логин контроллер
+                    self.webViewController?.dismiss(animated: true, completion: nil)
+                }
+            }.resume()
+        }
     }
+}
+
+
+extension Dictionary {
+    func percentEscaped() -> String {
+        return map { (key, value) in
+            let escapedKey = "\(key)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            let escapedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            return escapedKey + "=" + escapedValue
+            }
+            .joined(separator: "&")
+    }
+}
+
+extension CharacterSet {
+    /**
+        Компонент запроса содержит неиерархические данные, которые наряду с
+      данные в компоненте пути , служат для идентификации
+      ресурс в рамках схемы URI и полномочий по именованию
+      (если есть). Компонент запроса обозначен первым вопросом
+      знак ("?") и оканчивается символом цифры ("#")
+      или к концу URI.
+
+       - Общий синтаксис URI RFC 3986 январь 2005:
+        
+                    query = * (pchar / "/" / "?")
+    
+        Символы косой черты ("/") и вопросительного знака ("?") Могут представлять данные
+      внутри компонента запроса. Некоторые старые, ошибочные
+      реализации могут не обрабатывать такие данные правильно, когда они используются как
+      базовый URI для относительных ссылок , по-видимому
+      потому что они не могут отличить данные запроса от данных пути, когда
+      ищет иерархические разделители. Однако в качестве компонентов запроса
+      часто используются для переноса идентифицирующей информации в форме
+      пары «ключ - значение» и одно часто используемое значение является ссылкой на
+      другой URI, иногда для удобства использования лучше избегать
+      кодирование этих символов.
+    
+       - Обработанный синтаксис на 2020:
+    
+                    query = * (pchar)
+    */
+    static let urlQueryValueAllowed: CharacterSet = {
+        let generalDelimitersToEncode = ":#[]@"
+        let subDelimitersToEncode = "!$&'()*+,;="
+        
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "\(generalDelimitersToEncode)\(subDelimitersToEncode)")
+        return allowed
+    }()
 }

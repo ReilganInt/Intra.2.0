@@ -19,8 +19,12 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.vmormont.swifty</string>
+			</array>
 			<key>CFBundleURLName</key>
-			<string>com.vmormont.swifty://oauth2callback</string>
+			<string>com.vmormont.swifty</string>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>

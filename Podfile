@@ -8,4 +8,5 @@ target 'Intra-2.0' do
   # Pods for Intra-2.0
 	pod 'OAuthSwift', '~> 2.0.0'
 	pod 'KeychainSwift'
+  pod 'SwiftyJSON'
 end

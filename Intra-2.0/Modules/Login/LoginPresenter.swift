@@ -42,6 +42,8 @@ extension LoginPresenter: LoginPresenterProtocol {
                     case .failure(let err):
                         AlertHelper.showAlert(style: .alert, title: "Token Error", message: err.localizedDescription)
                     case .success(_):
+                        AlertHelper.showAlert(style: .alert, title: "Success", message: API42Manager.shared.oAuthAccessToken)
+                        // Route to Main
                         break
                     }
                 }

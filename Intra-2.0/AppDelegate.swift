@@ -12,15 +12,8 @@ import OAuthSwift
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        return true
-    }
-    
-    func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        API42Manager.shared.processOAuthResponse(url)
         return true
     }
 
